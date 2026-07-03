@@ -133,7 +133,32 @@ Every processed invoice receives
 
 ### User Journey
 
-User Uploads Invoice -> FastAPI receives request -> Create Job -> Store Invoice -> Redis Queue -> Celery Worker -> LangGraph -> Document Agent -> Validation Agent -> Policy Agent -> Decision Agent -> ERP Agent -> Evaluation Agent -> Store Results -> Update Dashboard
+```mermaid
+graph LR
+    A[User Uploads Invoice] --> B[FastAPI receives request]
+    B --> C[Create Job]
+    C --> D[Store Invoice]
+    D --> E[Redis Queue]
+    E --> F[Celery Worker]
+    F --> G[LangGraph]
+    
+    subgraph AI Agent Workflow
+        G --> H[Document Agent]
+        H --> I[Validation Agent]
+        I --> J[Policy Agent]
+        J --> K[Decision Agent]
+        K --> L[ERP Agent]
+        L --> M[Evaluation Agent]
+    end
+    
+    M --> N[Store Results]
+    N --> O[Update Dashboard]
+
+    %% Styling %%
+    style A fill:#4CAF50,stroke:#333,stroke-width:2px,color:#fff
+    style O fill:#2196F3,stroke:#333,stroke-width:2px,color:#fff
+    classDef default fill:#f9f9f9,stroke:#333,stroke-width:1px;
+```
 
 
 ### Success Metrics
