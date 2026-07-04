@@ -15,77 +15,54 @@ The goal is to build a modular, scalable, production-inspired AI platform for au
 ### High Level Architecture
 
 ```mermaid
+
 graph TD
-    %% Subgraph Layer 1: Presentation
-    subgraph Layer_1 [1. User Interface]
-        UI[Streamlit UI<br><small>Upload • Dashboard • Review</small>]
-    end
+    %% Nodes Definitions
+    UI["Streamlit UI<br>Upload • Dashboard • Review"]
+    API["FastAPI Gateway<br>REST APIs • Auth • Upload"]
+    Redis["Redis<br>Celery Queue"]
+    Worker["Celery Worker<br>Executes LangGraph Workflow"]
+    Router["Supervisor Agent (Router)"]
+    
+    DocAgent["Document Agent"]
+    ValAgent["Validation Agent"]
+    PolAgent["Policy Agent"]
+    DecAgent["Decision Agent"]
+    
+    ERPAgent["ERP Agent"]
+    Human["Human Review"]
+    EvalAgent["Evaluation Agent"]
+    
+    Storage[(PostgreSQL • Qdrant • Langfuse • Audit Logs)]
 
-    %% Subgraph Layer 2: API Gateway
-    subgraph Layer_2 [2. API Gateway]
-        API[FastAPI Gateway<br><small>REST APIs • Auth • Upload</small>]
-    end
-
-    %% Subgraph Layer 3: Queue Management
-    subgraph Layer_3 [3. Message Broker & Queue]
-        Redis[(Redis<br><small>Celery Queue</small>)]
-    end
-
-    %% Subgraph Layer 4: AI Workflow Engine
-    subgraph Layer_4 [4. Background Worker & Orchestration]
-        Worker[Celery Worker<br><small>Executes LangGraph Workflow</small>]
-        Router[Supervisor Agent (Router)]
-        
-        %% Parallel Agents
-        DocAgent[Document Agent]
-        ValAgent[Validation Agent]
-        PolAgent[Policy Agent]
-        
-        %% Downstream Processing
-        DecAgent[Decision Agent]
-        ERPAgent[ERP Agent]
-        Human[Human Review]
-        EvalAgent[Evaluation Agent]
-    end
-
-    %% Subgraph Layer 5: Storage
-    subgraph Layer_5 [5. Persistence & Observability]
-        DB[(PostgreSQL • Qdrant<br>Langfuse • Audit Logs)]
-    end
-
-    %% Direct Connections between layers
+    %% Execution Flow
     UI --> API
     API -->|Create Processing Job| Redis
     Redis --> Worker
     Worker --> Router
 
-    %% Router to Parallel Agents
+    %% Router Split
     Router --> DocAgent
     Router --> ValAgent
     Router --> PolAgent
 
-    %% Parallel Agents to Decision Agent
+    %% Merge to Decision Agent
     DocAgent --> DecAgent
     ValAgent --> DecAgent
     PolAgent --> DecAgent
 
-    %% Decision Agent Splits
+    %% Decision Split
     DecAgent --> ERPAgent
     DecAgent --> Human
 
-    %% Final Chains
+    %% Final Chain
     ERPAgent --> EvalAgent
-    EvalAgent --> DB
+    EvalAgent --> Storage
 
-    %% Component Styling for GitHub Themes
-    style UI fill:#FF4B4B,stroke:#333,stroke-width:1px,color:#fff
-    style API fill:#009688,stroke:#333,stroke-width:1px,color:#fff
-    style Redis fill:#DC382D,stroke:#333,stroke-width:1px,color:#fff
-    style Worker fill:#376C29,stroke:#333,stroke-width:1px,color:#fff
-    style DB fill:#336791,stroke:#333,stroke-width:1px,color:#fff
-    style Router fill:#5A5A5A,stroke:#333,stroke-width:1px,color:#fff
-    
-    classDef default fill:#f4f5f6,stroke:#bbb,stroke-width:1px,color:#333;
+    %% Styling to mimic the clean ASCII look
+    classDef default fill:#ffffff,stroke:#333333,stroke-width:1px,color:#333333;
+    classDef storageNode fill:#f8f9fa,stroke:#333333,stroke-dasharray: 5 5;
+    class Storage storageNode;
 ```
 
 
