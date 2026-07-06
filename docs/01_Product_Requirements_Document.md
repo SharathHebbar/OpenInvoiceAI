@@ -1,9 +1,9 @@
 # OpenInvoice AI
-# Product Requirements Document (PRD)
+## Product Requirements Document (PRD)
 
-Version 1.0
-Author: Sharath S Hebbar
-Status: Draft
+- Version 1.0
+- Author: Sharath S Hebbar
+- Status: Draft
 
 
 ### Vision

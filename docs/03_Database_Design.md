@@ -2,9 +2,9 @@
 
 ## Database Design
 
-Version: 1.0
-Author: Sharath S Hebbar
-Status: Draft
+- Version: 1.0
+- Author: Sharath S Hebbar
+- Status: Draft
 
 ### Purpose
 
