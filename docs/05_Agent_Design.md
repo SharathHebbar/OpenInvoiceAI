@@ -25,6 +25,7 @@
 ### Design Principles
 
 - The agent layer follows the following principles
+
 | Principle              | Description                                                                  |
 | ---------------------- | ---------------------------------------------------------------------------- |
 | Single Responsibility  | Every agent performs one business capability only                            |
@@ -228,27 +229,18 @@ Checks include
 
 Workflow
 
-```mermaid 
-flowchart LR
+```mermaid
+flowchart TD
+    StructuredInvoice[Structured Invoice] --> SchemaValidation[Schema Validation]
+    SchemaValidation --> BusinessValidation[Business Validation]
+    BusinessValidation --> DuplicateCheck[Duplicate Check]
+    DuplicateCheck --> ValidationResult[Validation Result]
 
-StructuredInvoice
-
-↓
-
-SchemaValidation
-
-↓
-
-BusinessValidation
-
-↓
-
-DuplicateCheck
-
-↓
-
-ValidationResult
+    %% Subtle colors to match an enterprise validation pipeline
+    style StructuredInvoice fill:#f9f9f9,stroke:#333,stroke-width:1px
+    style ValidationResult fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px
 ```
+
 
 Updates
 - state.validation
@@ -270,25 +262,16 @@ Workflow
 
 ```mermaid
 flowchart LR
+    StructuredInvoice[Structured Invoice] --> SchemaValidation[Schema Validation]
+    SchemaValidation --> BusinessValidation[Business Validation]
+    BusinessValidation --> DuplicateCheck[Duplicate Check]
+    DuplicateCheck --> ValidationResult[Validation Result]
 
-StructuredInvoice
-
-↓
-
-SchemaValidation
-
-↓
-
-BusinessValidation
-
-↓
-
-DuplicateCheck
-
-↓
-
-ValidationResult
+    %% Clean styling for GitHub dark/light mode compatibility
+    style StructuredInvoice fill:#f9f9f9,stroke:#333,stroke-width:1px
+    style ValidationResult fill:#e8f5e9,stroke:#2e7d32,stroke-width:1px
 ```
+
 
 Updates
 - state.policy
@@ -311,27 +294,14 @@ Decision Inputs
 
 Decision Tree
 
-```mermaid 
+```mermaid
 flowchart LR
-
-StructuredInvoice
-
-↓
-
-SchemaValidation
-
-↓
-
-BusinessValidation
-
-↓
-
-DuplicateCheck
-
-↓
-
-ValidationResult
+    StructuredInvoice[Structured Invoice] --> SchemaValidation[Schema Validation]
+    SchemaValidation --> BusinessValidation[Business Validation]
+    BusinessValidation --> DuplicateCheck[Duplicate Check]
+    DuplicateCheck --> ValidationResult[Validation Result]
 ```
+
 
 Updates
 - state.decision
@@ -354,25 +324,12 @@ Workflow
 
 ```mermaid
 flowchart LR
-
-ApprovedInvoice
-
-↓
-
-Transformation
-
-↓
-
-ERP API
-
-↓
-
-Response
-
-↓
-
-InvoiceState
+    ApprovedInvoice[Approved Invoice] --> Transformation
+    Transformation --> ERP_API[ERP API]
+    ERP_API --> Response
+    Response --> InvoiceState[Invoice State]
 ```
+
 
 Updates
 - state.erp
@@ -395,23 +352,14 @@ Outputs
 - Evaluation Report
 
 Workflow
+
 ```mermaid
 flowchart LR
-
-WorkflowState
-
-↓
-
-Metrics
-
-↓
-
-LLM Evaluation
-
-↓
-
-Quality Report
+    WorkflowState[Workflow State] --> Metrics
+    Metrics --> LLMEvaluation[LLM Evaluation]
+    LLMEvaluation --> QualityReport[Quality Report]
 ```
+
 
 Updates
 - state.evaluation
@@ -454,27 +402,12 @@ Agent->>State: Update
 - Every LLM powered agent follows a standardized prompt structure
 
 ```mermaid
-System Prompt
-
-↓
-
-Business Context
-
-↓
-
-Task Instructions
-
-↓
-
-InvoiceState Context
-
-↓
-
-Tool Results
-
-↓
-
-Expected Output Schema
+graph TD
+    A[System Prompt] --> B[Business Context]
+    B --> C[Task Instructions]
+    C --> D[InvoiceState Context]
+    D --> E[Tool Results]
+    E --> F[Expected Output Schema]
 ```
 
 This ensures:
@@ -487,22 +420,13 @@ This ensures:
 
 ```mermaid
 flowchart TD
+    Agent[Agent] --> Success{Success?}
+    Success -- No --> Retry[Retry]
+    Retry --> Success
+    Retry --> Failed[Failed]
+    Failed --> HumanReview[Human Review]
+    Success -- Yes --> Continue[Continue]
 
-Agent
-
-↓
-
-Success?
-
-No --> Retry
-
-Retry --> Success
-
-Retry --> Failed
-
-Failed --> Human Review
-
-Success --> Continue
 ```
 
 ### Observability
