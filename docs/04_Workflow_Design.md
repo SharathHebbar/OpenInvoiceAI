@@ -1,5 +1,5 @@
 # OpenInvoice AI
-## Workflow Design
+# Workflow Design
 
 - Version 1.0
 - Author: Sharath S Hebbar
@@ -211,6 +211,4 @@ flowchart TD
     style Database fill:#e1f5fe,stroke:#0288d1,stroke-width:1px
     style UI fill:#ffe0b2,stroke:#f57c00,stroke-width:1px
 ```
-
-### Design Decisions
 
