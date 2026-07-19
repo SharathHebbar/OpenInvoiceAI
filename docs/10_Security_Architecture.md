@@ -224,24 +224,11 @@ Measures include
 
 ```mermaid
 flowchart TD
+    Internet --> API_Gateway[API Gateway]
+    API_Gateway --> Private_Network[Private Network]
+    Private_Network --> Backend_Services[Backend Services]
+    Backend_Services --> Database
 
-Internet
-
--->
-
-API Gateway
-
--->
-
-Private Network
-
--->
-
-Backend Services
-
--->
-
-Database
 ```
 
 Only the Gateway is internet-facing
